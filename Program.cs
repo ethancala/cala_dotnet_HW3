@@ -26,16 +26,55 @@ namespace cala_dotnet_HW3
             //create a dictionary to store inventory and cart information.
 
             //string a double for item and price of item
-            //Dictionary<string, double> inventory = new Dictionary<string, double>();
+            Dictionary<string, double> inventory = new Dictionary<string, double>();
 
             //string and int for item and number of items
-            //Dictionary<string, int> cart = new Dictionary<string, int>();
+            Dictionary<string, int> cart = new Dictionary<string, int>();
 
 
             //welcome message and banner
             Console.WriteLine("****************************");
             Console.WriteLine("STOREFRONT V1.0");
             Console.WriteLine("****************************");
+            
+            //get the file path and store as a string
+            Console.WriteLine("Please enter the path of grocery items file: \n");
+            string filePath = Console.ReadLine();
+            
+            //ensure the file exists
+            if (!File.Exists(filePath))
+            {
+                Console.WriteLine("Error: File not found");
+                return;
+            }
+            
+            //try catch to read the file
+            try
+            {
+                //use stream reader 
+                using (StreamReader reader = new StreamReader(filePath))
+                {
+                    while (!reader.EndOfStream)
+                    {
+                        string item = reader.ReadLine()?.Trim().ToLower();
+                        if (double.TryParse(reader.ReadLine(), out double price) && !string.IsNullOrEmpty(item))
+                        {
+                            inventory[item] = price;
+                        }
+                    }
+                }
+
+            }
+            //catch exception if issue with file reading
+            catch (Exception exception)
+            {
+                Console.WriteLine($"Error reading the file: {exception} ");
+                    return;
+            }
+            
+            
+            
+
         }
     }
 }
