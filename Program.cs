@@ -9,6 +9,8 @@ list of what they can buy. To purchase something, the user will type the name of
 they would like. The program will add the item and quantity to its running tab. At the end, the program will show the
 user what they purchased and the final price.*/
 
+//stack overflow, and chatGPT were used to figure out certain lines of code with NOTE, but no code was entirely generated:
+//how to use Dictionaries, how to read from files using stream reader, and how to format data.
 
 //imports
 using System;
@@ -23,8 +25,11 @@ namespace cala_dotnet_HW3
     {
         static void Main(string[] args)
         {
+            //create total amount 
+            double totalAmount = 0;
+            
             //create a dictionary to store inventory and cart information.
-
+            
             //string a double for item and price of item
             Dictionary<string, double> inventory = new Dictionary<string, double>();
 
@@ -57,6 +62,7 @@ namespace cala_dotnet_HW3
                     while (!reader.EndOfStream)
                     {
                         string item = reader.ReadLine()?.Trim().ToLower();
+                        //NOTE: looked this format up
                         if (double.TryParse(reader.ReadLine(), out double price) && !string.IsNullOrEmpty(item))
                         {
                             inventory[item] = price;
@@ -82,8 +88,69 @@ namespace cala_dotnet_HW3
                 Console.WriteLine($"{item.Key}:  ${item.Value}");
             }
             
-            
+            //loop until users breaks with quit
+            while (true)
+            {
+                //prompt user for input
+                Console.Write("Enter the name of the Item, or 'quit' to end:  ");
+                string itemPurchased = Console.ReadLine().Trim().ToLower();
 
+                //quit if user user types quit
+                if (itemPurchased == "quit")
+                {
+                    break;
+                }
+
+                //check if the item is found
+                if (!inventory.ContainsKey(itemPurchased))
+                {
+                    //if not try again
+                    Console.WriteLine("Error: Item not found. Please try again.");
+                    continue;
+                }
+                
+                //if item found, ask how many
+                Console.WriteLine("How many would you like: ");
+                
+                //NOTE same format looked up for validation
+                if (!int.TryParse(Console.ReadLine(), out int quantity) || quantity <= 0)
+                {
+                    Console.WriteLine("Invalid quantity, please try again.");
+                    continue;
+                }
+                
+                //if quantity is valid, add value to cart dictionary
+                //if already in cart
+                if (cart.ContainsKey(itemPurchased))
+                {
+                    //add more
+                    cart[itemPurchased] += quantity;
+                }
+                else
+                {
+                    //else add it for the first time
+                    cart[itemPurchased] = quantity;
+                }
+                
+                //lastly, just calculate total and provide receipt
+                Console.WriteLine("Here is what you bought: ");
+                
+
+                //iterate through each key-value pair
+                foreach (var item in cart)
+                {
+                    //get cost and add to total while displaying the amount
+                    //NOTE formatting was looked up here
+                    double cost = item.Value * inventory[item.Key];
+                    Console.WriteLine($"{item.Key} x{item.Value} = ${cost:F2}");
+                    totalAmount += cost;
+                }
+                
+                
+            }
+            //print total and thank the user!
+            Console.WriteLine($"Your total for today: ${totalAmount:F2}");
+            Console.WriteLine("Thank you for shopping with us!");
         }
     }
 }
