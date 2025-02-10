@@ -53,7 +53,7 @@ namespace cala_dotnet_HW3
             {
                 //use stream reader 
                 using (StreamReader reader = new StreamReader(filePath))
-                {
+                { //NOTE: I had to look up how to do this
                     while (!reader.EndOfStream)
                     {
                         string item = reader.ReadLine()?.Trim().ToLower();
@@ -72,6 +72,15 @@ namespace cala_dotnet_HW3
                     return;
             }
             
+            //now that we read the file, we can print out the inventory data to prompt the user to shop
+            Console.WriteLine("\nWhat would you like to buy?");
+            
+            //for each loop where we provide each keyvalue pair
+            //NOTE: I had to look up how to do this!
+            foreach (var item in inventory)
+            {
+                Console.WriteLine($"{item.Key}:  ${item.Value}");
+            }
             
             
 
