@@ -38,9 +38,9 @@ namespace cala_dotnet_HW3
 
 
             //welcome message and banner
-            Console.WriteLine("****************************");
-            Console.WriteLine("STOREFRONT V1.0");
-            Console.WriteLine("****************************");
+            Console.WriteLine("*********************************************");
+            Console.WriteLine("\t\tSTOREFRONT V1.0");
+            Console.WriteLine("*********************************************");
             
             //get the file path and store as a string
             Console.WriteLine("Please enter the path of grocery items file: \n");
