@@ -16,7 +16,7 @@ user what they purchased and the final price.*/
 using System;
 using System.Collections.Generic;
 using System.IO;
-
+using System.Linq;
 
 
 namespace cala_dotnet_HW3
@@ -38,12 +38,12 @@ namespace cala_dotnet_HW3
 
 
             //welcome message and centered banner
-            Console.WriteLine("*********************************************");
+            Console.WriteLine("\n*********************************************");
             Console.WriteLine("\t\tSTOREFRONT V1.0");
             Console.WriteLine("*********************************************");
             
             //get the file path and store as a string
-            Console.WriteLine("Please enter the path of grocery items file: \n");
+            Console.WriteLine("\nPlease enter the path of grocery items file: \n");
             string filePath = Console.ReadLine();
             
             //ensure the file exists
@@ -78,21 +78,26 @@ namespace cala_dotnet_HW3
                     return;
             }
             
-            //now that we read the file, we can print out the inventory data to prompt the user to shop
-            Console.WriteLine("\nWhat would you like to buy?");
+            // Sort inventory alphabetically NOTE I HAD TO LOOK THIS UP
+            inventory = inventory.OrderBy(i => i.Key).ToDictionary(i => i.Key, i => i.Value);
             
-            //for each loop where we provide each keyvalue pair
-            //NOTE: I had to look up how to do this!
-            foreach (var item in inventory)
-            {
-                Console.WriteLine($"{item.Key}:  ${item.Value}");
-            }
+            
             
             //loop until users breaks with quit
             while (true)
             {
+                //now that we read the file, we can print out the inventory data to prompt the user to shop
+                Console.WriteLine("\nWhat would you like to buy?\n");
+            
+                //for each loop where we provide each keyvalue pair
+                //NOTE: I had to look up how to do this!
+                foreach (var item in inventory)
+                {
+                    Console.WriteLine($"{item.Key, -20}  ${item.Value:F2}");
+                }
+                
                 //prompt user for input
-                Console.Write("Enter the name of the Item, or 'quit' to end:  ");
+                Console.Write("\nEnter the name of the Item, or 'quit' to end:  ");
                 string itemPurchased = Console.ReadLine().Trim().ToLower();
 
                 //quit if user user types quit
@@ -110,7 +115,7 @@ namespace cala_dotnet_HW3
                 }
                 
                 //if item found, ask how many
-                Console.WriteLine("How many would you like: ");
+                Console.Write("\nHow many would you like: ");
                 
                 //NOTE same format looked up for validation
                 if (!int.TryParse(Console.ReadLine(), out int quantity) || quantity <= 0)
@@ -133,24 +138,25 @@ namespace cala_dotnet_HW3
                 }
                 
                 //lastly, just calculate total and provide receipt
-                Console.WriteLine("Here is what you bought: ");
-                
-
-                //iterate through each key-value pair
-                foreach (var item in cart)
-                {
-                    //get cost and add to total while displaying the amount
-                    //NOTE formatting was looked up here
-                    double cost = item.Value * inventory[item.Key];
-                    Console.WriteLine($"{item.Key} x{item.Value} = ${cost:F2}");
-                    totalAmount += cost;
-                }
-                
-                
+                Console.Write($"\nYou added {itemPurchased}, quantity {quantity}, to your cart.");
             }
+            
+            //sort the cart the same way. NOTE I HAD TO LOOK THIS UP
+            cart = cart.OrderBy(i => i.Key).ToDictionary(i => i.Key, i => i.Value);
+            
             //print total and thank the user!
-            Console.WriteLine($"Your total for today: ${totalAmount:F2}");
-            Console.WriteLine("Thank you for shopping with us!");
+            Console.WriteLine("\nHere is what you bought:\n");
+
+            //iterate through each key-value pair
+            foreach (var item in cart)
+            {
+                //get cost and add to total while displaying the amount
+                double cost = item.Value * inventory[item.Key];
+                Console.WriteLine($"{item.Key,-20} {item.Value,-3}");
+                totalAmount += cost;
+            }
+            Console.WriteLine($"\nYour total for today: ${totalAmount:F2}");
+            Console.WriteLine("\n\nThank you for shopping with us!");
         }
     }
 }
