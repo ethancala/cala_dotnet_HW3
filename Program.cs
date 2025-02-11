@@ -37,7 +37,7 @@ namespace cala_dotnet_HW3
             Dictionary<string, int> cart = new Dictionary<string, int>();
 
 
-            //welcome message and banner
+            //welcome message and centered banner
             Console.WriteLine("*********************************************");
             Console.WriteLine("\t\tSTOREFRONT V1.0");
             Console.WriteLine("*********************************************");
